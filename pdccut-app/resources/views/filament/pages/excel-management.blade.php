@@ -116,15 +116,6 @@
                 <form action="{{ route('admin.excel.import') }}" method="POST" enctype="multipart/form-data" class="space-y-4" x-data="{ uploading: false }" x-on:submit="uploading = true">
                     @csrf
                     
-                    <!-- Debug Info -->
-                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                        <p class="text-sm text-yellow-800">
-                            <strong>Debug:</strong> Form action: {{ route('admin.excel.import') }}<br>
-                            <strong>CSRF:</strong> {{ csrf_token() }}<br>
-                            <strong>User:</strong> {{ auth()->user()->id ?? 'Not authenticated' }}
-                        </p>
-                    </div>
-                    
                     <!-- Financial Year Selection -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
