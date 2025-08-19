@@ -275,7 +275,7 @@
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach($history as $item)
                                     <tr>
-                                        <td class="px-4 py-2 text-sm text-gray-700">{{ verta($item->created_at)->format('Y/m/d H:i') }}</td>
+                                        <td class="px-4 py-2 text-sm text-gray-700">{{ \Morilog\Jalali\Jalalian::fromDateTime($item->created_at)->format('Y/m/d H:i') }}</td>
                                         <td class="px-4 py-2 text-sm text-gray-700">{{ optional($item->user)->first_name }} {{ optional($item->user)->last_name }} ({{ $item->user_id }})</td>
                                         <td class="px-4 py-2 text-sm text-gray-700">{{ $item->original_name }}</td>
                                         <td class="px-4 py-2 text-sm text-gray-700">{{ $item->financial_year }}</td>
