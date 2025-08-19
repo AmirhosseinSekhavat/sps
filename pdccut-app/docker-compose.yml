@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pdccut-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - pdccut
+
+  db:
+    image: mysql:8.0
+    container_name: pdccut-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: pdccut
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+      MYSQL_USER: pdccut
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - pdccut
+
+  nginx:
+    image: nginx:alpine
+    container_name: pdccut-nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - pdccut
+
+  redis:
+    image: redis:alpine
+    container_name: pdccut-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - pdccut
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: pdccut-mailpit
+    restart: unless-stopped
+    ports:
+      - "8025:8025
+      - "1025:1025"
+    networks:
+      - pdccut
+
+networks:
+  pdccut:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local 
