@@ -241,5 +241,61 @@
                 </div>
             </div>
         </x-filament::card>
+
+        <!-- Upload History -->
+        <x-filament::card>
+            <div class="space-y-4">
+                <h3 class="text-lg font-medium text-gray-900">
+                    <x-heroicon-o-clock class="h-5 w-5 inline mr-2 text-gray-600" />
+                    تاریخچه آپلودها
+                </h3>
+
+                @php
+                    $history = \App\Models\ExcelUpload::with('user')
+                        ->orderByDesc('created_at')
+                        ->limit(10)
+                        ->get();
+                @endphp
+
+                @if($history->count() === 0)
+                    <p class="text-sm text-gray-500">هنوز آپلودی ثبت نشده است.</p>
+                @else
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">تاریخ</th>
+                                    <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">کاربر</th>
+                                    <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">نام فایل</th>
+                                    <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">سال مالی</th>
+                                    <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">حجم</th>
+                                    <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">وضعیت</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @foreach($history as $item)
+                                    <tr>
+                                        <td class="px-4 py-2 text-sm text-gray-700">{{ verta($item->created_at)->format('Y/m/d H:i') }}</td>
+                                        <td class="px-4 py-2 text-sm text-gray-700">{{ optional($item->user)->first_name }} {{ optional($item->user)->last_name }} ({{ $item->user_id }})</td>
+                                        <td class="px-4 py-2 text-sm text-gray-700">{{ $item->original_name }}</td>
+                                        <td class="px-4 py-2 text-sm text-gray-700">{{ $item->financial_year }}</td>
+                                        <td class="px-4 py-2 text-sm text-gray-700">{{ number_format((int) $item->size_bytes) }} بایت</td>
+                                        <td class="px-4 py-2 text-sm">
+                                            @if($item->status === 'success')
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">موفق</span>
+                                            @elseif($item->status === 'failed')
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800" title="{{ $item->error_message }}">ناموفق</span>
+                                            @else
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">در حال پردازش</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
+            </div>
+        </x-filament::card>
     </div>
 </x-filament-panels::page> 

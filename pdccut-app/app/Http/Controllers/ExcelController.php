@@ -9,6 +9,7 @@ use App\Models\ShareCertificate;
 use App\Exports\UsersExport;
 use App\Imports\UsersImport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\ExcelUpload;
 
 class ExcelController extends Controller
 {
@@ -47,22 +48,38 @@ class ExcelController extends Controller
             'financial_year' => 'required|integer|min:1300|max:1500',
         ]);
 
+        $uploadLog = new ExcelUpload();
+        $uploadLog->user_id = auth()->id();
+        $uploadLog->financial_year = (int) $request->financial_year;
+
         try {
             $file = $request->file('file');
-            $financialYear = $request->financial_year;
+            $uploadLog->original_name = $file->getClientOriginalName();
+            $uploadLog->stored_name = null;
+            $uploadLog->mime_type = $file->getClientMimeType();
+            $uploadLog->size_bytes = $file->getSize();
+            $uploadLog->status = 'processing';
+            $uploadLog->save();
 
             \Log::info('Starting Excel import', [
                 'filename' => $file->getClientOriginalName(),
                 'size' => $file->getSize(),
-                'financial_year' => $financialYear
+                'financial_year' => $uploadLog->financial_year
             ]);
 
             // Import users with financial year
-            Excel::import(new UsersImport($financialYear), $file);
+            Excel::import(new UsersImport($uploadLog->financial_year), $file);
+
+            $uploadLog->status = 'success';
+            $uploadLog->save();
 
             \Log::info('Excel import completed successfully');
-            return back()->with('success', "کاربران با موفقیت برای سال مالی {$financialYear} وارد شدند.");
+            return back()->with('success', "کاربران با موفقیت برای سال مالی {$uploadLog->financial_year} وارد شدند.");
         } catch (\Exception $e) {
+            $uploadLog->status = 'failed';
+            $uploadLog->error_message = $e->getMessage();
+            $uploadLog->save();
+
             \Log::error('Excel import failed', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
