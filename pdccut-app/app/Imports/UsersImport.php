@@ -115,7 +115,6 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithCalcul
                     'share_count' => $this->parseNumericValue($row['تعداد-سهام'] ?? 0),
                     'annual_profit_amount' => $this->parseNumericValue($row['مبلغ-سود-سهام-سال'] ?? 0),
                     'annual_payment' => $this->parseNumericValue($row['سود-سهام-پرداختی-سال'] ?? 0),
-                    'is_active' => true,
                 ]
             );
             Log::info('Share certificate created/updated with ID: ' . $certificate->id);
