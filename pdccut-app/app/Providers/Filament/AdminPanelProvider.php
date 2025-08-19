@@ -33,7 +33,7 @@ class AdminPanelProvider extends PanelProvider
 			])
 			->brandName('PDCCUT.IR')
 			->favicon(asset('images/favicon.png') . '?v=2')
-			->font('Vazir, Tahoma, sans-serif')
+			->font('IRANSansX, Tahoma, Arial, sans-serif')
 			// Explicitly register resources to exclude SettingResource
 			->resources([
 				\App\Filament\Resources\UserResource::class,
