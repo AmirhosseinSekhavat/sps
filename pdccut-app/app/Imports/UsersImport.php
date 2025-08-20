@@ -22,12 +22,16 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithCalcul
     {
         $this->financialYear = $financialYear;
         HeadingRowFormatter::default('none');
-        Log::info('UsersImport initialized with financial year: ' . $financialYear);
+        if (app()->environment('local')) {
+            Log::info('UsersImport initialized with financial year: ' . $financialYear);
+        }
     }
 
     public function model(array $row)
     {
-        Log::info('Processing Excel row:', $row);
+        if (app()->environment('local')) {
+            Log::info('Processing Excel row');
+        }
 
         $firstName = $row['نام'] ?? null;
         $lastName = $row['نام-خانوادگی'] ?? null;
@@ -37,7 +41,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithCalcul
         $nationalCode = $this->normalizeNationalCode($row['کد-ملی'] ?? null);
 
         if (empty($nationalCode) && empty($membership) && empty($mobile)) {
-            Log::warning('Skipping row - no identifier provided. Available keys: ' . implode(', ', array_keys($row)));
+            Log::warning('Skipping row - no identifier provided');
             return null;
         }
 
@@ -54,7 +58,9 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithCalcul
         }
 
         if ($user) {
-            Log::info('Updating existing user: ' . $user->id);
+            if (app()->environment('local')) {
+                Log::info('Updating existing user', ['user_id' => $user->id]);
+            }
 
             $user->update([
                 'first_name' => $firstName ?? $user->first_name,
@@ -69,7 +75,9 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithCalcul
             return null;
         }
 
-        Log::info('Creating new user. Identifiers - national: ' . ($nationalCode ?? 'null') . ', membership: ' . ($membership ?? 'null') . ', mobile: ' . ($mobile ?? 'null'));
+        if (app()->environment('local')) {
+            Log::info('Creating new user');
+        }
 
         // Guard against unique collisions explicitly before insert
         if (!empty($membership) && User::where('membership_number', $membership)->exists()) {
@@ -94,7 +102,9 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithCalcul
 
         $newUser->save();
 
-        Log::info('New user created with ID: ' . $newUser->id);
+        if (app()->environment('local')) {
+            Log::info('New user created', ['user_id' => $newUser->id]);
+        }
 
         $this->createOrUpdateShareCertificate($newUser, $row);
 
@@ -103,7 +113,9 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithCalcul
 
     protected function createOrUpdateShareCertificate(User $user, array $row)
     {
-        Log::info('Creating/updating share certificate for user: ' . $user->id . ' year: ' . $this->financialYear);
+        if (app()->environment('local')) {
+            Log::info('Creating/updating share certificate', ['user_id' => $user->id, 'year' => $this->financialYear]);
+        }
         try {
             $certificate = ShareCertificate::updateOrCreate(
                 [
@@ -117,9 +129,11 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithCalcul
                     'annual_payment' => $this->parseNumericValue($row['سود-سهام-پرداختی-سال'] ?? 0),
                 ]
             );
-            Log::info('Share certificate created/updated with ID: ' . $certificate->id);
+            if (app()->environment('local')) {
+                Log::info('Share certificate created/updated', ['certificate_id' => $certificate->id]);
+            }
         } catch (\Exception $e) {
-            Log::error('Error creating share certificate: ' . $e->getMessage());
+            Log::error('Error creating share certificate', ['message' => $e->getMessage()]);
             throw $e;
         }
     }
@@ -136,7 +150,9 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithCalcul
         $englishNumbers = ['0','1','2','3','4','5','6','7','8','9'];
         $value = str_replace($persianNumbers, $englishNumbers, $value);
         $value = preg_replace('/[^0-9.]/', '', (string) $value);
-        Log::info('Parsed numeric value: ' . $value . ' from: ' . $value);
+        if (app()->environment('local')) {
+            Log::info('Parsed numeric value');
+        }
         return is_numeric($value) ? $value : 0;
     }
 
@@ -167,7 +183,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithCalcul
         $digits = preg_replace('/\D+/', '', $digits);
         // treat all-zeros or wrong length as null
         if (strlen($digits) !== 10 || preg_match('/^0+$/', $digits)) {
-            Log::info('National code normalized to NULL due to invalid value', ['raw' => $value, 'normalized' => $digits]);
+            Log::info('National code normalized to NULL due to invalid value');
             return null;
         }
         return $digits;

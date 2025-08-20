@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'account.lockout' => \App\Http\Middleware\AccountLockoutMiddleware::class,
             'ip.blacklist' => \App\Http\Middleware\IpBlacklistMiddleware::class,
         ]);
+        $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

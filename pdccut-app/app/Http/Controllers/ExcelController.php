@@ -37,11 +37,12 @@ class ExcelController extends Controller
      */
     public function importUsers(Request $request)
     {
-        \Log::info('Excel import request received', [
-            'request_data' => $request->all(),
-            'files' => $request->allFiles(),
-            'user' => auth()->user()
-        ]);
+        if (app()->environment('local')) {
+            \Log::info('Excel import request received (local)', [
+                'user_id' => optional(auth()->user())->id,
+                'has_file' => $request->hasFile('file'),
+            ]);
+        }
 
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls,csv|max:10240',
@@ -61,11 +62,13 @@ class ExcelController extends Controller
             $uploadLog->status = 'processing';
             $uploadLog->save();
 
-            \Log::info('Starting Excel import', [
-                'filename' => $file->getClientOriginalName(),
-                'size' => $file->getSize(),
-                'financial_year' => $uploadLog->financial_year
-            ]);
+            if (app()->environment('local')) {
+                \Log::info('Starting Excel import', [
+                    'filename' => $file->getClientOriginalName(),
+                    'size' => $file->getSize(),
+                    'financial_year' => $uploadLog->financial_year
+                ]);
+            }
 
             // Import users with financial year
             Excel::import(new UsersImport($uploadLog->financial_year), $file);
@@ -73,7 +76,6 @@ class ExcelController extends Controller
             $uploadLog->status = 'success';
             $uploadLog->save();
 
-            \Log::info('Excel import completed successfully');
             return back()->with('success', "کاربران با موفقیت برای سال مالی {$uploadLog->financial_year} وارد شدند.");
         } catch (\Exception $e) {
             $uploadLog->status = 'failed';
@@ -82,7 +84,6 @@ class ExcelController extends Controller
 
             \Log::error('Excel import failed', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
             ]);
             return back()->withErrors(['file' => 'خطا در وارد کردن فایل: ' . $e->getMessage()]);
         }
