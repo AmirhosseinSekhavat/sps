@@ -62,9 +62,9 @@
     <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <div class="text-center">
-                <div class="mx-auto h-20 w-20 bg-green-600 rounded-full flex items-center justify-center">
-                    <i class="fas fa-shield-check text-white text-3xl"></i>
-                    </div>
+                <div class="flex justify-center">
+                    <img src="{{ asset('images/logo.png') }}" alt="PDCCUT.IR" class="h-20 w-auto">
+                </div>
                 <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
                     تایید کد
                 </h2>
