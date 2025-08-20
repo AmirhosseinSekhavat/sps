@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ورود به سیستم - PDCCUT.IR</title>
+    <title>ورود به پرتال سهامداران - PDCCUT.IR</title>
     
     <!-- Load Font Awesome first -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -69,7 +69,7 @@
                     ورود به سیستم
                 </h2>
                 <p class="mt-2 text-sm text-gray-600">
-                    PDCCUT.IR - سیستم مدیریت سهام
+                    sps.pdccut.ir - پرتال سهمداران
                 </p>
             </div>
 
