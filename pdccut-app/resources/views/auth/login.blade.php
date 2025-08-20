@@ -62,14 +62,14 @@
     <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <div class="text-center">
-                <div class="mx-auto h-20 w-20 bg-blue-600 rounded-full flex items-center justify-center">
-                    <i class="fas fa-building text-white text-3xl"></i>
+                <div class="flex justify-center">
+                    <img src="{{ asset('images/logo.png') }}" alt="PDCCUT.IR" class="h-20 w-auto">
                 </div>
                 <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
                     ورود به سیستم
                 </h2>
                 <p class="mt-2 text-sm text-gray-600">
-                    sps.pdccut.ir - پرتال سهمداران
+                    پرتال سهامداران شرکت تعاونی تولیدی توزیعی هیات علمی دانشگاه تهران
                 </p>
             </div>
 
