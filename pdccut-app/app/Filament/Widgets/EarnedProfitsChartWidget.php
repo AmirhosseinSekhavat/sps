@@ -2,34 +2,83 @@
 
 namespace App\Filament\Widgets;
 
-use Filament\Widgets\ChartWidget;
 use App\Models\EarnedProfit;
+use Filament\Widgets\ChartWidget;
 
 class EarnedProfitsChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'سودهای اکتسابی (هزار ریال)';
+    protected static ?string $heading = 'نمودار سودهای اکتسابی عملکرد شرکت';
+    
+    protected static ?string $maxHeight = '320px';
+
+    protected int | string | array $columnSpan = [
+        'sm' => 12,
+        'lg' => 6,
+    ];
+    
+    protected static ?int $sort = 2;
 
     protected function getData(): array
     {
-        $profits = EarnedProfit::active()->orderBy('year')->get(['year', 'amount']);
-        $labels = $profits->pluck('year')->toArray();
-        $data = $profits->map(fn($p) => round($p->amount / 1000, 2))->toArray();
+        $rows = EarnedProfit::active()
+            ->orderBy('year')
+            ->get(['year', 'amount']);
+
+        $years = $rows->pluck('year')->map(fn ($y) => (string) $y)->all();
+        $profits = $rows->pluck('amount')->map(fn ($v) => (float) $v)->all();
 
         return [
             'datasets' => [
                 [
-                    'label' => 'سودها (هزار ریال)',
-                    'data' => $data,
-                    'borderColor' => '#10B981',
-                    'backgroundColor' => 'rgba(16, 185, 129, 0.2)',
+                    'label' => 'سودهای اکتسابی (هزار ریال)',
+                    'data' => $profits,
+                    'backgroundColor' => 'rgba(220, 38, 38, 0.8)',
+                    'borderColor' => 'rgba(220, 38, 38, 1)',
+                    'borderWidth' => 1,
+                    'borderRadius' => 4,
+                    'borderSkipped' => false,
+                    'barThickness' => 16,
+                    'maxBarThickness' => 22,
                 ],
             ],
-            'labels' => $labels,
+            'labels' => $years,
         ];
     }
 
     protected function getType(): string
     {
-        return 'line';
+        return 'bar';
+    }
+
+    protected function getOptions(): array
+    {
+        return [
+            'layout' => [
+                'padding' => [ 'left' => 8, 'right' => 8, 'top' => 8, 'bottom' => 8 ],
+            ],
+            'plugins' => [
+                'title' => [
+                    'display' => true,
+                    'text' => 'نمودار سودهای اکتسابی عملکرد شرکت (سال‌های دارای داده)',
+                    'font' => [
+                        'size' => 16,
+                        'family' => 'Vazir, Tahoma, sans-serif'
+                    ]
+                ],
+                'legend' => [
+                    'display' => false
+                ]
+            ],
+            'scales' => [
+                'y' => [
+                    'beginAtZero' => true,
+                ],
+                'x' => [
+                    'ticks' => [ 'autoSkip' => true, 'maxRotation' => 0 ],
+                ]
+            ],
+            'responsive' => true,
+            'maintainAspectRatio' => false,
+        ];
     }
 }
