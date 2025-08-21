@@ -141,7 +141,7 @@
                                 <span class="text-gray-600">مبلغ کل سهام:</span>
                                 <span class="font-medium">
                                     @if($latestCertificate)
-                                        {{ number_format($latestCertificate->share_amount) }} تومان
+                                        {{ number_format($latestCertificate->share_amount) }} ریال
                                     @else
                                         —
                                     @endif
@@ -161,7 +161,7 @@
                                 <span class="text-gray-600">سود سالانه:</span>
                                 <span class="font-medium">
                                     @if($latestCertificate)
-                                        {{ number_format($latestCertificate->annual_profit_amount) }} تومان
+                                        {{ number_format($latestCertificate->annual_profit_amount) }} ریال
                                     @else
                                         —
                                     @endif
@@ -171,7 +171,7 @@
                                 <span class="text-gray-600">سود سهام پرداختی سال:</span>
                                 <span class="font-medium">
                                     @if($latestCertificate)
-                                        {{ number_format($latestCertificate->annual_payment) }} تومان
+                                        {{ number_format($latestCertificate->annual_payment) }} ریال
                                     @else
                                         —
                                     @endif
@@ -311,11 +311,11 @@
                         </div>
                         <div>
                             <p class="text-sm text-gray-600">مبلغ سود سالانه:</p>
-                            <p class="font-medium text-gray-900">{{ number_format($latestCertificate->annual_profit_amount) }} تومان</p>
+                            <p class="font-medium text-gray-900">{{ number_format($latestCertificate->annual_profit_amount) }} ریال</p>
                         </div>
                         <div>
                             <p class="text-sm text-gray-600">مبلغ پرداخت سالانه:</p>
-                            <p class="font-medium text-gray-900">{{ number_format($latestCertificate->annual_payment) }} تومان</p>
+                            <p class="font-medium text-gray-900">{{ number_format($latestCertificate->annual_payment) }} ریال</p>
                         </div>
                     </div>
                     

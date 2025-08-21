@@ -126,7 +126,7 @@
                                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2 text-sm">
                                     <div>
                                         <span class="text-gray-500">مبلغ سهام:</span>
-                                        <span class="font-medium text-gray-900">{{ number_format($certificate->share_amount) }} تومان</span>
+                                        <span class="font-medium text-gray-900">{{ number_format($certificate->share_amount) }} ریال</span>
                                     </div>
                                     <div>
                                         <span class="text-gray-500">تعداد سهام:</span>
@@ -134,11 +134,11 @@
                                     </div>
                                     <div>
                                         <span class="text-gray-500">سود سالانه:</span>
-                                        <span class="font-medium text-gray-900">{{ number_format($certificate->annual_profit_amount) }} تومان</span>
+                                        <span class="font-medium text-gray-900">{{ number_format($certificate->annual_profit_amount) }} ریال</span>
                                     </div>
                                     <div>
                                         <span class="text-gray-500">سود سهام پرداختی سال:</span>
-                                        <span class="font-medium text-gray-900">{{ number_format($certificate->annual_payment) }} تومان</span>
+                                        <span class="font-medium text-gray-900">{{ number_format($certificate->annual_payment) }} ریال</span>
                                     </div>
                                 </div>
                             </div>

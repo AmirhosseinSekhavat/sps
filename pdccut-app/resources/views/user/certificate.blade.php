@@ -42,7 +42,7 @@
                         <div class="space-y-3">
                             <div class="flex justify-between">
                                 <span class="text-gray-600">مبلغ کل سهام:</span>
-                                <span class="font-medium">{{ number_format($certificate->share_amount) }} تومان</span>
+                                <span class="font-medium">{{ number_format($certificate->share_amount) }} ریال</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">تعداد سهام:</span>
@@ -50,15 +50,15 @@
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">سود سالانه:</span>
-                                <span class="font-medium">{{ number_format($certificate->annual_profit_amount) }} تومان</span>
+                                <span class="font-medium">{{ number_format($certificate->annual_profit_amount) }} ریال</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">مبلغ سود:</span>
-                                <span class="font-medium">{{ number_format($certificate->profit_amount) }} تومان</span>
+                                <span class="font-medium">{{ number_format($certificate->profit_amount) }} ریال</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">پرداخت سالانه:</span>
-                                <span class="font-medium">{{ number_format($certificate->annual_payment) }} تومان</span>
+                                <span class="font-medium">{{ number_format($certificate->annual_payment) }} ریال</span>
                             </div>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                             @foreach($earnedProfits as $profit)
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-700">{{ $profit->profit_type }}</span>
-                                <span class="font-medium text-green-700">{{ number_format($profit->amount) }} تومان</span>
+                                <span class="font-medium text-green-700">{{ number_format($profit->amount) }} ریال</span>
                             </div>
                             @if($profit->description)
                             <div class="text-xs text-gray-500 mr-4">{{ $profit->description }}</div>
