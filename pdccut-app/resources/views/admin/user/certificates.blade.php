@@ -146,7 +146,7 @@
                         
                         <div class="flex items-center gap-2">
                             @php
-                                $hasFile = $certificate->pdf_path && Storage::disk('public')->exists($certificate->pdf_path);
+                                $hasFile = $certificate->pdf_path && Storage::disk('local')->exists($certificate->pdf_path);
                             @endphp
 
                             @if($hasFile)

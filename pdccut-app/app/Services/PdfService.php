@@ -18,7 +18,7 @@ class PdfService
             $relativePath = "certificates/{$user->national_code}_{$year}.pdf";
             
             // Ensure directory exists
-            $fullPath = Storage::disk('public')->path($relativePath);
+            $fullPath = Storage::disk('local')->path($relativePath);
             $dir = dirname($fullPath);
             if (!is_dir($dir)) {
                 mkdir($dir, 0775, true);
@@ -58,8 +58,8 @@ class PdfService
             // Get PDF content
             $pdfContent = $mpdf->Output('', 'S');
             
-            // Save to storage
-            Storage::disk('public')->put($relativePath, $pdfContent);
+            // Save to private storage
+            Storage::disk('local')->put($relativePath, $pdfContent);
             
             return $relativePath;
 

@@ -41,7 +41,7 @@ class ExcelController extends Controller
             \Log::info('Excel import request received (local)', [
                 'user_id' => optional(auth()->user())->id,
                 'has_file' => $request->hasFile('file'),
-            ]);
+        ]);
         }
 
         $request->validate([
@@ -63,11 +63,11 @@ class ExcelController extends Controller
             $uploadLog->save();
 
             if (app()->environment('local')) {
-                \Log::info('Starting Excel import', [
-                    'filename' => $file->getClientOriginalName(),
-                    'size' => $file->getSize(),
+            \Log::info('Starting Excel import', [
+                'filename' => $file->getClientOriginalName(),
+                'size' => $file->getSize(),
                     'financial_year' => $uploadLog->financial_year
-                ]);
+            ]);
             }
 
             // Import users with financial year

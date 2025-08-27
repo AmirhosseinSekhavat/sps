@@ -104,7 +104,7 @@ class UserController extends Controller
             abort(404);
         }
 
-        if (request()->boolean('force') || app()->environment('local') || !$certificate->pdf_path || !Storage::disk('public')->exists($certificate->pdf_path)) {
+        if (request()->boolean('force') || app()->environment('local') || !$certificate->pdf_path || !Storage::disk('local')->exists($certificate->pdf_path)) {
             // Try to generate on the fly
             $pdfService = app(PdfService::class);
             $path = $pdfService->generateShareCertificate($user, $certificate, (int) $year);
@@ -112,7 +112,7 @@ class UserController extends Controller
             $certificate->save();
         }
 
-        $path = Storage::disk('public')->path($certificate->pdf_path);
+        $path = Storage::disk('local')->path($certificate->pdf_path);
         return response()->file($path, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="certificate_'.$user->national_code.'_'.$year.'.pdf"',
@@ -132,7 +132,7 @@ class UserController extends Controller
             
         }
 
-        if (request()->boolean('force') || app()->environment('local') || !$certificate->pdf_path || !Storage::disk('public')->exists($certificate->pdf_path)) {
+        if (request()->boolean('force') || app()->environment('local') || !$certificate->pdf_path || !Storage::disk('local')->exists($certificate->pdf_path)) {
             // Generate on the fly
             $pdfService = app(PdfService::class);
             $path = $pdfService->generateShareCertificate($user, $certificate, (int) $year);
@@ -140,7 +140,7 @@ class UserController extends Controller
             $certificate->save();
         }
 
-        $absolutePath = Storage::disk('public')->path($certificate->pdf_path);
+        $absolutePath = Storage::disk('local')->path($certificate->pdf_path);
         return response()->download($absolutePath, 'certificate_'.$user->national_code.'_'.$year.'.pdf', [ 'Content-Type' => 'application/pdf' ]);
     }
 
@@ -166,5 +166,4 @@ class UserController extends Controller
 
         return back()->with('success', 'اعلان خوانده شد.');
     }
-
 }

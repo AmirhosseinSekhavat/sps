@@ -23,7 +23,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithCalcul
         $this->financialYear = $financialYear;
         HeadingRowFormatter::default('none');
         if (app()->environment('local')) {
-            Log::info('UsersImport initialized with financial year: ' . $financialYear);
+        Log::info('UsersImport initialized with financial year: ' . $financialYear);
         }
     }
 

@@ -19,7 +19,7 @@
     <!-- Preload critical Farsi fonts -->
     <link rel="preload" as="font" type="font/woff2" href="{{ asset('fonts/Farsi numerals/Webfonts/fonts/Woff2/IRANSansXFaNum-Regular.woff2') }}" crossorigin>
     <link rel="preload" as="font" type="font/woff2" href="{{ asset('fonts/Farsi numerals/Webfonts/fonts/Woff2/IRANSansXFaNum-Bold.woff2') }}" crossorigin>
-
+    
     <!-- Load our custom CSS last -->
     @vite(['resources/css/app.css'])
     

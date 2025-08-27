@@ -70,14 +70,14 @@ class AdminUserController extends Controller
         $user = User::where('national_code', $nationalCode)->firstOrFail();
                 $certificate = $user->shareCertificates()->where('year', $year)->firstOrFail();
         
-        if (request()->boolean('force') || app()->environment('local') || !$certificate->pdf_path || !Storage::disk('public')->exists($certificate->pdf_path)) {
+        if (request()->boolean('force') || app()->environment('local') || !$certificate->pdf_path || !Storage::disk('local')->exists($certificate->pdf_path)) {
             $pdfService = app(PdfService::class);
             $path = $pdfService->generateShareCertificate($user, $certificate, (int) $year);
             $certificate->pdf_path = $path;
             $certificate->save();
         }
         
-        $path = Storage::disk('public')->path($certificate->pdf_path);
+        $path = Storage::disk('local')->path($certificate->pdf_path);
         return response()->file($path, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="certificate_'.$nationalCode.'_'.$year.'.pdf"',
@@ -92,14 +92,14 @@ class AdminUserController extends Controller
         $user = User::where('national_code', $nationalCode)->firstOrFail();
                 $certificate = $user->shareCertificates()->where('year', $year)->firstOrFail();
         
-        if (request()->boolean('force') || app()->environment('local') || !$certificate->pdf_path || !Storage::disk('public')->exists($certificate->pdf_path)) {
+        if (request()->boolean('force') || app()->environment('local') || !$certificate->pdf_path || !Storage::disk('local')->exists($certificate->pdf_path)) {
             $pdfService = app(PdfService::class);
             $path = $pdfService->generateShareCertificate($user, $certificate, (int) $year);
             $certificate->pdf_path = $path;
             $certificate->save();
         }
         
-        $path = Storage::disk('public')->path($certificate->pdf_path);
+        $path = Storage::disk('local')->path($certificate->pdf_path);
         return response()->download($path, 'certificate_'.$nationalCode.'_'.$year.'.pdf', [ 'Content-Type' => 'application/pdf' ]);
     }
 
