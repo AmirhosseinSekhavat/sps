@@ -122,11 +122,11 @@
                             سال مالی *
                         </label>
                         <select name="financial_year" required 
-                                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900">
                             <option value="">انتخاب سال مالی</option>
                             @for($year = 1400; $year <= 1410; $year++)
                                 <option value="{{ $year }}" {{ $year == 1403 ? 'selected' : '' }}>
-                                    {{ $year }} - {{ $year + 1 }}
+                                    {{ $year }}
                                 </option>
                             @endfor
                         </select>
