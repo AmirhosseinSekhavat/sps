@@ -126,7 +126,7 @@
                             <option value="">انتخاب سال مالی</option>
                             @php
                                 $currentYear = \Morilog\Jalali\Jalalian::now()->getYear();
-                                $startYear = $currentYear - 15;
+                                $startYear = 1376;
                                 $endYear = $currentYear + 15;
                             @endphp
                             @for($year = $startYear; $year <= $endYear; $year++)
