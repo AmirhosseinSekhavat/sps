@@ -84,7 +84,7 @@
             <div class="px-4 py-5 sm:p-6">
                 <div class="flex items-center">
                     <div class="h-12 w-12 bg-blue-600 rounded-full flex items-center justify-center">
-                        <span class="text-white font-bold">{{ substr($user->first_name, 0, 1) }}</span>
+                        <span class="text-white font-bold">{{ mb_substr($user->first_name ?? $user->name, 0, 1, 'UTF-8') }}</span>
                     </div>
                     <div class="mr-4">
                         <h3 class="text-lg leading-6 font-medium text-gray-900">
