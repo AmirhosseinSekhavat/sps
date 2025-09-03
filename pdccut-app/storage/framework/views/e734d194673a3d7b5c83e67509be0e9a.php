@@ -360,15 +360,20 @@
                     
                     <!-- Financial Year Selection -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">
                             سال مالی *
                         </label>
                         <select name="financial_year" required 
-                                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 dark:focus:ring-blue-400 dark:focus:border-blue-400">
                             <option value="">انتخاب سال مالی</option>
-                            <!--[if BLOCK]><![endif]--><?php for($year = 1400; $year <= 1410; $year++): ?>
+                            <?php
+                                $currentYear = \Morilog\Jalali\Jalalian::now()->getYear();
+                                $startYear = 1376;
+                                $endYear = $currentYear + 15;
+                            ?>
+                            <!--[if BLOCK]><![endif]--><?php for($year = $startYear; $year <= $endYear; $year++): ?>
                                 <option value="<?php echo e($year); ?>" <?php echo e($year == 1403 ? 'selected' : ''); ?>>
-                                    <?php echo e($year); ?> - <?php echo e($year + 1); ?>
+                                    <?php echo e($year); ?>
 
                                 </option>
                             <?php endfor; ?><!--[if ENDBLOCK]><![endif]-->
