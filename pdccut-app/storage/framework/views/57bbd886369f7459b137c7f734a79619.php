@@ -91,11 +91,10 @@
                 <div class="flex items-center space-x-4 space-x-reverse">
                     <a href="<?php echo e(route('user.dashboard')); ?>" class="text-gray-700 hover:text-gray-900">داشبورد</a>
                     <a href="<?php echo e(route('user.certificates')); ?>" class="text-gray-700 hover:text-gray-900">گواهی‌ها</a>
-                    <a href="<?php echo e(route('user.notifications')); ?>" class="relative inline-flex items-center text-gray-700 hover:text-gray-900">
-                        <i class="fas fa-bell text-xl"></i>
-                        <span class="ml-2">اعلان‌ها</span>
+                    <a href="<?php echo e(route('user.notifications')); ?>" class="inline-flex items-center text-gray-700 hover:text-gray-900">
+                        <span>اعلان‌ها</span>
                         <?php if(isset($unreadNotificationsCount) && $unreadNotificationsCount > 0): ?>
-                            <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5">
+                            <span class="ml-2 bg-red-600 text-white text-xs rounded-full px-2 py-0.5">
                                 <?php echo e($unreadNotificationsCount); ?>
 
                             </span>
