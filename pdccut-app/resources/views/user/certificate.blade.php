@@ -106,10 +106,11 @@
                     پیش‌نمایش گواهی
                 </h3>
                 
-                <div class="bg-gray-100 rounded-lg p-4 text-center">
-                    <i class="fas fa-file-pdf text-6xl text-red-500 mb-4"></i>
-                    <p class="text-gray-600 mb-4">برای مشاهده کامل گواهی، فایل PDF را دانلود یا مشاهده کنید.</p>
-                    <!-- کنترل تکرار دکمه‌ها: دکمه‌های مشاهده/دانلود در بالای صفحه نمایش داده می‌شوند -->
+                <div class="bg-gray-100 rounded-lg p-4">
+                    <div class="aspect-w-16 aspect-h-9">
+                        <iframe src="{{ route('user.certificate.view', $year) }}" title="پیش‌نمایش گواهی" class="w-full h-[70vh] rounded border border-gray-200" loading="lazy"></iframe>
+                    </div>
+                    <p class="text-gray-500 text-xs mt-2">اگر پیش‌نمایش در مرورگر شما نمایش داده نشد، از دکمه‌های بالای صفحه برای مشاهده یا دانلود گواهی استفاده کنید.</p>
                 </div>
             </div>
         </div>
