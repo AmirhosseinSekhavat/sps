@@ -15,10 +15,23 @@
                 
                 <div class="flex items-center space-x-2 space-x-reverse">
                     @if($certificate->pdf_path)
+                    <a href="{{ route('user.certificate.view', $year) }}" 
+                       target="_blank" rel="noopener"
+                       class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                        <i class="fas fa-eye ml-2"></i>
+                        مشاهده گواهی
+                    </a>
                     <a href="{{ route('user.certificate.download', $year) }}" 
                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
                         <i class="fas fa-download ml-2"></i>
-                        دانلود PDF
+                        دانلود گواهی
+                    </a>
+                    @else
+                    <a href="{{ route('user.certificate.view', $year) }}?force=1" 
+                       target="_blank" rel="noopener"
+                       class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
+                        <i class="fas fa-bolt ml-2"></i>
+                         مشاهده گواهی
                     </a>
                     @endif
                 </div>
@@ -105,7 +118,7 @@
                         <a href="{{ route('user.certificate.download', $year) }}" 
                            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700">
                             <i class="fas fa-download ml-2"></i>
-                            دانلود PDF
+                            دانلود گواهی
                         </a>
                     </div>
                 </div>

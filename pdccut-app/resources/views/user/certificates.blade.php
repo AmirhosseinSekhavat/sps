@@ -85,14 +85,14 @@
 
                         @if($hasFile)
                             <a href="{{ route('user.certificate.view', $certificate->year) }}" target="_blank" class="inline-flex items-center px-3 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700">
-                                <i class="fas fa-eye ml-2"></i> مشاهده PDF
+                                <i class="fas fa-eye ml-2"></i> مشاهده گواهی
                             </a>
                             <a href="{{ route('user.certificate.download', $certificate->year) }}" class="inline-flex items-center px-3 py-2 text-sm rounded-md bg-gray-600 text-white hover:bg-gray-700">
                                 <i class="fas fa-download ml-2"></i> دانلود
                             </a>
                         @else
-                            <a href="{{ route('user.certificate', $certificate->year) }}" class="inline-flex items-center px-3 py-2 text-sm rounded-md bg-green-600 text-white hover:bg-green-700">
-                                <i class="fas fa-eye ml-2"></i> مشاهده
+                            <a href="{{ route('user.certificate.view', $certificate->year) }}?force=1" target="_blank" rel="noopener" class="inline-flex items-center px-3 py-2 text-sm rounded-md bg-green-600 text-white hover:bg-green-700">
+                                <i class="fas fa-bolt ml-2"></i>  مشاهده گواهی
                             </a>
                         @endif
                     </div>
