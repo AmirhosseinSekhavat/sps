@@ -109,18 +109,7 @@
                 <div class="bg-gray-100 rounded-lg p-4 text-center">
                     <i class="fas fa-file-pdf text-6xl text-red-500 mb-4"></i>
                     <p class="text-gray-600 mb-4">برای مشاهده کامل گواهی، فایل PDF را دانلود یا مشاهده کنید.</p>
-                    <div class="flex items-center justify-center gap-3">
-                        <a href="{{ route('user.certificate.view', $year) }}" 
-                           class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700" target="_blank">
-                            <i class="fas fa-eye ml-2"></i>
-                            مشاهده آنلاین
-                        </a>
-                        <a href="{{ route('user.certificate.download', $year) }}" 
-                           class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700">
-                            <i class="fas fa-download ml-2"></i>
-                            دانلود گواهی
-                        </a>
-                    </div>
+                    <!-- کنترل تکرار دکمه‌ها: دکمه‌های مشاهده/دانلود در بالای صفحه نمایش داده می‌شوند -->
                 </div>
             </div>
         </div>
