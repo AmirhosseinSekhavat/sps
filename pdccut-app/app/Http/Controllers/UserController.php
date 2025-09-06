@@ -24,6 +24,11 @@ class UserController extends Controller
      */
     public function dashboard()
     {
+        // If session expired or user not authenticated, redirect to login instead of rendering empty page
+        if (!Auth::check()) {
+            return redirect()->route('auth.login');
+        }
+
         $user = Auth::user();
         $latestCertificate = $user->shareCertificates()->latest('year')->first();
         $unreadNotifications = $user->notifications()->unread()->count();
