@@ -344,11 +344,11 @@ class PdfService
                                 </tr>
                                 <tr>
                                     <td class="label">سود هر سهم (عملکرد سال ' . $this->toPersianDigits($certificate->year) . '):</td>
-                                    <td class="value">' . $this->toPersianDigits(number_format((int)($certificate->annual_profit_amount / max(1, (int)$certificate->share_count)))) . ' ریال</td>
+                                    <td class="value">' . $this->toPersianDigits(number_format((int) $certificate->annual_profit_amount)) . ' ریال</td>
                                 </tr>
                                 <tr>
                                     <td class="label">سود سال ' . $this->toPersianDigits($certificate->year) . ' عضو:</td>
-                                    <td class="value">' . $this->toPersianDigits(number_format((int)$certificate->annual_profit_amount)) . ' ریال</td>
+                                    <td class="value">' . $this->toPersianDigits(number_format((int) $certificate->annual_payment)) . ' ریال</td>
                                 </tr>
                             </table>
                         </td>

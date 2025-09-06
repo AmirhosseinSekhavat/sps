@@ -89,7 +89,7 @@
                             </span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-600">سود سالانه:</span>
+                            <span class="text-gray-600">سود سالانه (سال <?php echo e($latestCertificate ? $latestCertificate->year : $selectedYear); ?>):</span>
                             <span class="font-medium">
                                 <?php if($latestCertificate): ?>
                                     <?php echo e(number_format($latestCertificate->annual_profit_amount)); ?> ریال
@@ -99,7 +99,7 @@
                             </span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-600">سود سهام پرداختی سال:</span>
+                            <span class="text-gray-600">سود سهام پرداختی سال (سال <?php echo e($latestCertificate ? $latestCertificate->year : $selectedYear); ?>):</span>
                             <span class="font-medium">
                                 <?php if($latestCertificate): ?>
                                     <?php echo e(number_format($latestCertificate->annual_payment)); ?> ریال

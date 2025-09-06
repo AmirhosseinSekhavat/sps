@@ -92,9 +92,13 @@ class UserController extends Controller
             return back()->withErrors(['year' => 'گواهی سهام برای این سال یافت نشد.']);
         }
 
-        $earnedProfits = EarnedProfit::active()->forYear($year)->get();
+        // Gather user's annual payments per year from share certificates
+        $yearlyPayments = $user->shareCertificates()
+            ->orderByDesc('year')
+            ->get(['year', 'annual_payment']);
+        $totalYearlyPayment = $yearlyPayments->sum('annual_payment');
 
-        return view('user.certificate', compact('certificate', 'earnedProfits', 'year'));
+        return view('user.certificate', compact('certificate', 'year', 'yearlyPayments', 'totalYearlyPayment'));
     }
 
     /**
