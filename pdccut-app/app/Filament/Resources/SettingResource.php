@@ -79,12 +79,22 @@ class SettingResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('key')
                     ->label('کلید')
-                    ->searchable()
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        $normalized = self::normalizeSearchString($search);
+                        $driver = $query->getConnection()->getDriverName();
+                        $collate = $driver === 'mysql' ? ' COLLATE utf8mb4_unicode_ci' : '';
+                        return $query->whereRaw("REPLACE(REPLACE(`key`,'ي','ی'),'ك','ک'){$collate} LIKE ?", ['%' . $normalized . '%']);
+                    })
                     ->sortable(),
                 Tables\Columns\TextColumn::make('value')
                     ->label('مقدار')
                     ->limit(50)
-                    ->searchable(),
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        $normalized = self::normalizeSearchString($search);
+                        $driver = $query->getConnection()->getDriverName();
+                        $collate = $driver === 'mysql' ? ' COLLATE utf8mb4_unicode_ci' : '';
+                        return $query->whereRaw("REPLACE(REPLACE(`value`,'ي','ی'),'ك','ک'){$collate} LIKE ?", ['%' . $normalized . '%']);
+                    }),
                 Tables\Columns\TextColumn::make('type')
                     ->label('نوع')
                     ->badge()
@@ -143,6 +153,25 @@ class SettingResource extends Resource
                 ]),
             ])
             ->defaultSort('updated_at', 'desc');
+    }
+
+    // Normalize Persian/Arabic characters, remove ZWNJ, and optionally convert Persian digits to English
+    protected static function normalizeSearchString(string $value, bool $convertDigits = false): string
+    {
+        $map = [
+            'ي' => 'ی',
+            'ك' => 'ک',
+            "\xE2\x80\x8C" => ' ',
+        ];
+        $normalized = strtr($value, $map);
+
+        if ($convertDigits) {
+            $digitsFa = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+            $digitsEn = ['0','1','2','3','4','5','6','7','8','9'];
+            $normalized = str_replace($digitsFa, $digitsEn, $normalized);
+        }
+
+        return $normalized;
     }
 
     public static function getRelations(): array

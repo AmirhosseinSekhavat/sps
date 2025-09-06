@@ -67,7 +67,12 @@ class EarnedProfitResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('profit_type')
                     ->label('نوع سود')
-                    ->searchable()
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        $normalized = self::normalizeSearchString($search);
+                        $driver = $query->getConnection()->getDriverName();
+                        $collate = $driver === 'mysql' ? ' COLLATE utf8mb4_unicode_ci' : '';
+                        return $query->whereRaw("REPLACE(REPLACE(profit_type,'ي','ی'),'ك','ک'){$collate} LIKE ?", ['%' . $normalized . '%']);
+                    })
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
                     ->label('مبلغ')
@@ -77,7 +82,12 @@ class EarnedProfitResource extends Resource
                 Tables\Columns\TextColumn::make('description')
                     ->label('توضیحات')
                     ->limit(50)
-                    ->searchable(),
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        $normalized = self::normalizeSearchString($search);
+                        $driver = $query->getConnection()->getDriverName();
+                        $collate = $driver === 'mysql' ? ' COLLATE utf8mb4_unicode_ci' : '';
+                        return $query->whereRaw("REPLACE(REPLACE(description,'ي','ی'),'ك','ک'){$collate} LIKE ?", ['%' . $normalized . '%']);
+                    }),
                 Tables\Columns\IconColumn::make('is_active')
                     ->label('وضعیت')
                     ->boolean()
@@ -113,6 +123,25 @@ class EarnedProfitResource extends Resource
                 ]),
             ])
             ->defaultSort('created_at', 'desc');
+    }
+
+    // Normalize Persian/Arabic characters, remove ZWNJ, and optionally convert Persian digits to English
+    protected static function normalizeSearchString(string $value, bool $convertDigits = false): string
+    {
+        $map = [
+            'ي' => 'ی',
+            'ك' => 'ک',
+            "\xE2\x80\x8C" => ' ',
+        ];
+        $normalized = strtr($value, $map);
+
+        if ($convertDigits) {
+            $digitsFa = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+            $digitsEn = ['0','1','2','3','4','5','6','7','8','9'];
+            $normalized = str_replace($digitsFa, $digitsEn, $normalized);
+        }
+
+        return $normalized;
     }
 
     public static function getRelations(): array

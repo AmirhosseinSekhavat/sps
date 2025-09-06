@@ -117,13 +117,23 @@ class SmsLogResource extends Resource
                 
                 Tables\Columns\TextColumn::make('national_code')
                     ->label('کد ملی')
-                    ->searchable()
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        $normalized = self::normalizeSearchString($search, convertDigits: true);
+                        $driver = $query->getConnection()->getDriverName();
+                        $collate = $driver === 'mysql' ? ' COLLATE utf8mb4_unicode_ci' : '';
+                        return $query->whereRaw("national_code{$collate} LIKE ?", ['%' . $normalized . '%']);
+                    })
                     ->sortable(),
                 
                 Tables\Columns\TextColumn::make('mobile_number')
                     ->label('شماره موبایل')
                     ->formatStateUsing(fn ($record) => $record?->formatted_mobile ?? $record?->mobile_number ?? '')
-                    ->searchable()
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        $normalized = self::normalizeSearchString($search, convertDigits: true);
+                        $driver = $query->getConnection()->getDriverName();
+                        $collate = $driver === 'mysql' ? ' COLLATE utf8mb4_unicode_ci' : '';
+                        return $query->whereRaw("mobile_number{$collate} LIKE ?", ['%' . $normalized . '%']);
+                    })
                     ->sortable(),
                 
                 Tables\Columns\TextColumn::make('type')
@@ -142,7 +152,12 @@ class SmsLogResource extends Resource
                 
                 Tables\Columns\TextColumn::make('otp_code')
                     ->label('کد OTP')
-                    ->searchable()
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        $normalized = self::normalizeSearchString($search, convertDigits: true);
+                        $driver = $query->getConnection()->getDriverName();
+                        $collate = $driver === 'mysql' ? ' COLLATE utf8mb4_unicode_ci' : '';
+                        return $query->whereRaw("otp_code{$collate} LIKE ?", ['%' . $normalized . '%']);
+                    })
                     ->visible(fn ($record) => $record?->type === 'otp'),
                 
                 Tables\Columns\TextColumn::make('status')
@@ -246,6 +261,25 @@ class SmsLogResource extends Resource
             ])
             ->defaultSort('created_at', 'desc')
             ->paginated([25, 50, 100]);
+    }
+
+    // Normalize Persian/Arabic characters, remove ZWNJ, and optionally convert Persian digits to English
+    protected static function normalizeSearchString(string $value, bool $convertDigits = false): string
+    {
+        $map = [
+            'ي' => 'ی',
+            'ك' => 'ک',
+            "\xE2\x80\x8C" => ' ',
+        ];
+        $normalized = strtr($value, $map);
+
+        if ($convertDigits) {
+            $digitsFa = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+            $digitsEn = ['0','1','2','3','4','5','6','7','8','9'];
+            $normalized = str_replace($digitsFa, $digitsEn, $normalized);
+        }
+
+        return $normalized;
     }
 
     public static function getRelations(): array
