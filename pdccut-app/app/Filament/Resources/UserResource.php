@@ -118,17 +118,41 @@ class UserResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('full_name')
                     ->label('نام کامل')
-                    ->searchable(['first_name', 'last_name'])
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        $normalized = self::normalizeSearchString($search);
+                        $driver = $query->getConnection()->getDriverName();
+                        $collate = $driver === 'mysql' ? ' COLLATE utf8mb4_unicode_ci' : '';
+
+                        return $query->where(function (Builder $q) use ($normalized, $collate) {
+                            $q->whereRaw("REPLACE(REPLACE(first_name,'ي','ی'),'ك','ک'){$collate} LIKE ?", ['%' . $normalized . '%'])
+                              ->orWhereRaw("REPLACE(REPLACE(last_name,'ي','ی'),'ك','ک'){$collate} LIKE ?", ['%' . $normalized . '%']);
+                        });
+                    })
                     ->sortable(),
                 Tables\Columns\TextColumn::make('national_code')
                     ->label('کد ملی')
-                    ->searchable(),
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        $normalized = self::normalizeSearchString($search, convertDigits: true);
+                        $driver = $query->getConnection()->getDriverName();
+                        $collate = $driver === 'mysql' ? ' COLLATE utf8mb4_unicode_ci' : '';
+                        return $query->whereRaw("national_code{$collate} LIKE ?", ['%' . $normalized . '%']);
+                    }),
                 Tables\Columns\TextColumn::make('mobile_number')
                     ->label('موبایل')
-                    ->searchable(),
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        $normalized = self::normalizeSearchString($search, convertDigits: true);
+                        $driver = $query->getConnection()->getDriverName();
+                        $collate = $driver === 'mysql' ? ' COLLATE utf8mb4_unicode_ci' : '';
+                        return $query->whereRaw("mobile_number{$collate} LIKE ?", ['%' . $normalized . '%']);
+                    }),
                 Tables\Columns\TextColumn::make('membership_number')
                     ->label('شماره عضویت')
-                    ->searchable(),
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        $normalized = self::normalizeSearchString($search, convertDigits: true);
+                        $driver = $query->getConnection()->getDriverName();
+                        $collate = $driver === 'mysql' ? ' COLLATE utf8mb4_unicode_ci' : '';
+                        return $query->whereRaw("membership_number{$collate} LIKE ?", ['%' . $normalized . '%']);
+                    }),
                 Tables\Columns\TextColumn::make('latest_share_amount')
                     ->label('مبلغ سهام')
                     ->getStateUsing(fn (User $record) => optional($record->shareCertificates()->orderByDesc('year')->first())->share_amount)
@@ -206,6 +230,25 @@ class UserResource extends Resource
                 ]),
             ])
             ->defaultSort('created_at', 'desc');
+    }
+
+    // Normalize Persian/Arabic characters, remove ZWNJ, and optionally convert Persian digits to English
+    protected static function normalizeSearchString(string $value, bool $convertDigits = false): string
+    {
+        $map = [
+            'ي' => 'ی', // Arabic Yeh to Persian Yeh
+            'ك' => 'ک', // Arabic Kaf to Persian Kaf
+            "\xE2\x80\x8C" => ' ', // Zero-width non-joiner to space
+        ];
+        $normalized = strtr($value, $map);
+
+        if ($convertDigits) {
+            $digitsFa = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+            $digitsEn = ['0','1','2','3','4','5','6','7','8','9'];
+            $normalized = str_replace($digitsFa, $digitsEn, $normalized);
+        }
+
+        return $normalized;
     }
 
     public static function getRelations(): array
