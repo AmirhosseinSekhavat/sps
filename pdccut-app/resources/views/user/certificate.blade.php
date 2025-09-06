@@ -106,11 +106,9 @@
                     پیش‌نمایش گواهی
                 </h3>
                 
-                <div class="bg-gray-100 rounded-lg p-4">
-                    <div class="aspect-w-16 aspect-h-9">
-                        <iframe src="{{ route('user.certificate.view', $year) }}" title="پیش‌نمایش گواهی" class="w-full h-[70vh] rounded border border-gray-200" loading="lazy"></iframe>
-                    </div>
-                    <p class="text-gray-500 text-xs mt-2">اگر پیش‌نمایش در مرورگر شما نمایش داده نشد، از دکمه‌های بالای صفحه برای مشاهده یا دانلود گواهی استفاده کنید.</p>
+                <div class="bg-gray-100 rounded-lg p-0 overflow-hidden">
+                    <iframe src="{{ route('user.certificate.view', $year) }}" title="پیش‌نمایش گواهی" class="w-full rounded border border-gray-200" style="height: calc(100vh - 220px);" loading="lazy"></iframe>
+                    <p class="text-gray-500 text-xs mt-2 px-4 py-2">اگر پیش‌نمایش در مرورگر شما نمایش داده نشد، از دکمه‌های بالای صفحه برای مشاهده یا دانلود گواهی استفاده کنید.</p>
                 </div>
             </div>
         </div>
