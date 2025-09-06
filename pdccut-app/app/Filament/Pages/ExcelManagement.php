@@ -28,6 +28,11 @@ class ExcelManagement extends Page
     
     protected static string $view = 'filament.pages.excel-management';
 
+    // Declare properties used in the Blade view so Livewire can access them
+    public int $totalUsers = 0;
+    public int $activeUsers = 0;
+    public int $inactiveUsers = 0;
+
     public function mount(): void
     {
         // Get statistics
